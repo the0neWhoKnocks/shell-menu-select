@@ -9,6 +9,9 @@ displayed (which adds more overhead).
 
 ## How to use
 
+An example of how to use the script can be found in `example.sh`. You can run
+the code below to see it in action.
+
 ```
-./menu-select.sh
+./example.sh
 ```
