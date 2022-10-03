@@ -14,6 +14,8 @@ source ./get-choice.sh
 Remote (you want the functionality, but don't want to clone or copy anything)
 ```sh
 source <(wget -qO- https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-select/master/get-choice.sh)
+# or
+source <(curl -s https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-select/master/get-choice.sh)
 ```
 
 ---
