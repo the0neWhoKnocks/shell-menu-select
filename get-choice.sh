@@ -136,8 +136,8 @@ function getChoice(){
     echo "  -h, --help     Displays this message"
     echo "  -i, --index    The initially selected index for the options"
     echo "  -m, --max      Limit how many options are displayed"
-    echo "  -o, --options  An Array of options for a User to choose from"
-    echo "  -q, --query    Question or statement presented to the User"
+    echo "  -o, --options  An Array of options for a user to choose from"
+    echo "  -q, --query    Question or statement presented to the user"
     echo;
     echo "Example:"
     echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
