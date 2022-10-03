@@ -6,9 +6,8 @@ menuStr=""
 
 function hideCursor(){
   printf "\033[?25l"
-
-  # capture CTRL+C so cursor can be reset
-  trap "showCursor && return 0" 2
+  
+  trap "showCursor && return 0" 2 # capture CTRL+C so cursor can be reset
 }
 
 function showCursor(){
@@ -17,11 +16,9 @@ function showCursor(){
 
 function clearLastMenu(){
   local msgLineCount=$(printf "$menuStr" | wc -l)
-  # moves the curser up N lines so the output overwrites it
-  echo -en "\033[${msgLineCount}A"
+  echo -en "\033[${msgLineCount}A"                    # moves the cursor up N lines so the output overwrites it
 
-  # clear to end of screen to ensure there's no text left behind from previous input
-  [ $1 ] && tput ed
+  [ $1 ] && tput ed                                   # clear to end of screen to ensure there's no text left behind from previous input
 }
 
 function renderMenu(){
@@ -34,10 +31,8 @@ function renderMenu(){
   local spaces=""
   menuStr="\n $instruction\n"
 
-  # Get the longest item from the list so that we know how many spaces to add
-  # to ensure there's no overlap from longer items when a list is scrolling up or down.
-  for (( i=0; i<$itemsLength; i++ )); do
-    if (( ${#menuItems[i]} > longest )); then
+  for (( i=0; i<$itemsLength; i++ )); do              # Get the longest item from the list so that we know how many spaces to add
+    if (( ${#menuItems[i]} > longest )); then         # to ensure there's no overlap from longer items when a list is scrolling up or down.
       longest=${#menuItems[i]}
     fi
   done
@@ -57,7 +52,6 @@ function renderMenu(){
     currItemLength=${#currItem}
 
     if [[ $i = $selectedIndex ]]; then
-      selectedChoice="${currItem}"
       selector="${CHAR__GREEN}ᐅ${CHAR__RESET}"
       currItem="${CHAR__GREEN}${currItem}${CHAR__RESET}"
     else
@@ -71,8 +65,7 @@ function renderMenu(){
 
   menuStr="${menuStr}\n"
 
-  # whether or not to overwrite the previous menu output
-  [ $4 ] && clearLastMenu
+  [ $4 ] && clearLastMenu                             # whether or not to overwrite the previous menu output
 
   printf "${menuStr}"
 }
@@ -86,12 +79,12 @@ function getChoice(){
   local maxViewable=0
   local instruction="Select an item from the list:"
   local selectedIndex=0
+  local -n outVar=selectedChoice
 
   remainingArgs=()
   
-  # If there is only the getChoice command, show error and help.
   if [[ $# -lt 1 ]]; then
-    echo "[ERROR] No arguments specified."
+    echo "[ERROR] No arguments specified."            # If there is only the getChoice command, show error and help.
     displayHelp=true
   fi
   
@@ -120,6 +113,10 @@ function getChoice(){
         instruction="$2"
         shift 2
         ;;
+      -O|--output)
+        local -n outVar=$2
+        shift 2
+        ;;
       *)
         remainingArgs+=("$1")
         shift
@@ -134,21 +131,26 @@ function getChoice(){
     echo "Renders a keyboard navigable menu with a visual indicator of what's selected."
     echo;
     echo "  -h, --help     Displays this message"
-    echo "  -i, --index    The initially selected index for the options"
+    echo;
+    echo "  -i, --index    The initially selected index for the options  [Default: 0]"
     echo "  -m, --max      Limit how many options are displayed"
     echo "  -o, --options  An Array of options for a user to choose from"
-    echo "  -q, --query    Question or statement presented to the user"
+    echo "  -O, --output   Name of variable to store choice               [Default: \$selectedChoice]"
+    echo "  -q, --query    Question or statement presented to the user    [Default: \"Select an item from the following list:\""
     echo;
-    echo "Example:"
-    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
+    echo "Examples:"
+    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"other\")     # Define options"
     echo;
-    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i \$((\${#foodOptions[@]}-1)) -m 4"
-    echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
+    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 0 -m \$((\${#foodOptions[@]}-1))     # Get input from user"
+    echo "  echo \" Your choice is '\${selectedChoice}'\"     # Display choice selected by user"
     echo;
-    echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
-    echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
+    echo "---------------------------------------------------------------------------------"
     echo;
-
+    echo " emotionOptions=(\"Happy\" \"Sad\" \"Confused\" \"Neutral\" \"Stressed\" \"Angry\")     # Define options"
+    echo;
+    echo " getChoice -q \"How are you feeling today?\" -o emotionOptions -i 0 -m \$((\${#emotionOptions[@]}-1)) -O emotion     # Get input from user and store choice in \$emotion"
+    echo " echo \"Why are you feeling ${emotion}?\"     # Ask why the user is feeling the emotion they chose"
+    echo;
     return 0
   fi
 
@@ -183,4 +185,6 @@ function getChoice(){
         ;;
     esac
   done
+  outVar="${menuItems[$selectedIndex]}"                 # Store output in $selectedChoice or variable defined in --output value
+  return 0
 }
