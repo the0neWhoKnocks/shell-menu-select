@@ -88,6 +88,14 @@ function getChoice(){
   local selectedIndex=0
 
   remainingArgs=()
+  
+  # If there is only the getChoice command, show error and help.
+  if [[ $# -lt 1 ]]; then
+    echo "[ERROR] No arguments specified."
+    echo;
+    displayHelp=true
+  fi
+  
   while [[ $# -gt 0 ]]; do
     key="$1"
 
@@ -147,12 +155,6 @@ function getChoice(){
 
   set -- "${remainingArgs[@]}"
   local itemsLength=${#menuItems[@]}
-
-  # no menu items, at least 1 required
-  if [[ $itemsLength -lt 1 ]]; then
-    printf "\n [ERROR] No menu items provided\n"
-    return 1
-  fi
 
   renderMenu "$instruction" $selectedIndex $maxViewable
   hideCursor
