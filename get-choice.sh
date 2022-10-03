@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CHAR__GREEN='\033[0;32m'
+CHAR__RED='\033[0;31m'
 CHAR__RESET='\033[0m'
 menuStr=""
 returnOrExit=""
@@ -79,6 +80,28 @@ function renderMenu {
   printf "${menuStr}"
 }
 
+function renderHelp {
+  echo;
+  echo "Usage: getChoice [OPTION]..."
+  echo "Renders a keyboard navigable menu with a visual indicator of what's selected."
+  echo;
+  echo "  -h, --help               Displays this message"
+  echo "  -i, --index              The initially selected index for the options"
+  echo "  -m, --max                Limit how many options are displayed"
+  echo "  -o, --options            An Array of options for a user to choose from"
+  echo "  -q, --query              Question or statement presented to the user"
+  echo;
+  echo "Example:"
+  echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
+  echo;
+  echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 6 -m 4"
+  echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
+  echo;
+  echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
+  echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
+  echo;
+}
+
 function getChoice {
   local KEY__ARROW_UP=$(echo -e "\033[A")
   local KEY__ARROW_DOWN=$(echo -e "\033[B")
@@ -95,6 +118,15 @@ function getChoice {
   else
     # running via CLI
     returnOrExit="return"
+  fi
+  
+  if [[ "${BASH}" == "" ]]; then
+    printf "\n ${CHAR__RED}[ERROR] This function utilizes Bash expansion, but your current shell is \"${SHELL}\"${CHAR__RESET}\n"
+    $returnOrExit 1
+  elif [[ $# == 0 ]]; then
+    printf "\n ${CHAR__RED}[ERROR] No arguments provided${CHAR__RESET}\n"
+    renderHelp
+    $returnOrExit 1
   fi
   
   local remainingArgs=()
@@ -132,26 +164,7 @@ function getChoice {
 
   # just display help
   if $displayHelp; then
-    echo;
-    echo "Usage: getChoice [OPTION]..."
-    echo "Renders a keyboard navigable menu with a visual indicator of what's selected."
-    echo;
-    echo "  -h, --help     Displays this message"
-    echo "  -i, --index    The initially selected index for the options"
-    echo "  -m, --max      Limit how many options are displayed"
-    echo "  -o, --options  An Array of options for a User to choose from"
-    echo "  -q, --query    Question or statement presented to the User"
-    echo;
-    echo "Example:"
-    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
-    echo;
-    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i \$((\${#foodOptions[@]}-1)) -m 4"
-    echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
-    echo;
-    echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
-    echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
-    echo;
-
+    renderHelp
     $returnOrExit 0
   fi
 
@@ -160,7 +173,8 @@ function getChoice {
   
   # no menu items, at least 1 required
   if [[ $itemsLength -lt 1 ]]; then
-    printf "\n [ERROR] No menu items provided\n"
+    printf "\n ${CHAR__RED}[ERROR] No menu items provided${CHAR__RESET}\n"
+    renderHelp
     $returnOrExit 1
   fi
 
