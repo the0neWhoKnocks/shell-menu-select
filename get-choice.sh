@@ -4,27 +4,27 @@ CHAR__GREEN='\033[0;32m'
 CHAR__RESET='\033[0m'
 menuStr=""
 
-function hideCursor(){
+function hideCursor {
   printf "\033[?25l"
 
   # capture CTRL+C so cursor can be reset
   trap "showCursor && exit 0" 2
 }
 
-function showCursor(){
+function showCursor {
   printf "\033[?25h"
 }
 
-function clearLastMenu(){
+function clearLastMenu {
   local msgLineCount=$(printf "$menuStr" | wc -l)
-  # moves the curser up N lines so the output overwrites it
+  # moves the cursor up N lines so the output overwrites it
   echo -en "\033[${msgLineCount}A"
 
   # clear to end of screen to ensure there's no text left behind from previous input
   [ $1 ] && tput ed
 }
 
-function renderMenu(){
+function renderMenu {
   local start=0
   local selector=""
   local instruction="$1"
@@ -77,7 +77,7 @@ function renderMenu(){
   printf "${menuStr}"
 }
 
-function getChoice(){
+function getChoice {
   local KEY__ARROW_UP=$(echo -e "\033[A")
   local KEY__ARROW_DOWN=$(echo -e "\033[B")
   local KEY__ENTER=$(echo -e "\n")
@@ -87,9 +87,9 @@ function getChoice(){
   local instruction="Select an item from the list:"
   local selectedIndex=0
 
-  remainingArgs=()
+  local remainingArgs=()
   while [[ $# -gt 0 ]]; do
-    key="$1"
+    local key="$1"
 
     case $key in
       -h|--help)
