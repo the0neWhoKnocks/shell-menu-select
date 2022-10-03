@@ -14,10 +14,38 @@ source <(curl -s https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-se
 
 ---
 
-All flags and an example are demonstrated via the `--help` command.
+## Flags
+```
+-h, --help     Displays help message
 
-### Example
+-i, --index    The initially selected index for the options   [Default: 0]
+-m, --max      Limit how many options are displayed
+-o, --options  An Array of options for a user to choose from
+-O, --output   Name of variable to store choice               [Default: $selectedChoice]
+-q, --query    Question or statement presented to the user    [Default: "Select an item from the following list:"]
+```
+
+### Examples
 ```sh
-source ./get-choice.sh
-getChoice -h
+# Define options
+foodOptions=("pizza" "burgers" "chinese" "sushi" "thai" "italian" "other")
+
+# Get length of foodOptions
+foodOptLength=$((${#foodOptions[@]}-1))
+
+# Get input from user
+getChoice -q "What do you feel like eating?" -o foodOptions -i 0 -m $foodOptLength
+
+# Display choice made by user
+echo " Your choice is '${selectedChoice}'"
+```
+```sh
+# Define options
+emotionOptions=("Happy" "Sad" "Confused" "Neutral" "Stressed" "Angry")
+
+# Get input from user and store choice in $emotion
+getChoice -q "How are you feeling today?" -o emotionOptions -i 0 -m $((${#emotionOptions[@]}-1)) -O emotion
+
+# Ask why the user is feeling the emotion they chose
+echo "Why are you feeling ${emotion}?"
 ```
