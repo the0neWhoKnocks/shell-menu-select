@@ -132,24 +132,32 @@ function getChoice(){
     echo;
     echo "  -h, --help     Displays this message"
     echo;
-    echo "  -i, --index    The initially selected index for the options  [Default: 0]"
+    echo "  -i, --index    The initially selected index for the options   [Default: 0]"
     echo "  -m, --max      Limit how many options are displayed"
     echo "  -o, --options  An Array of options for a user to choose from"
     echo "  -O, --output   Name of variable to store choice               [Default: \$selectedChoice]"
     echo "  -q, --query    Question or statement presented to the user    [Default: \"Select an item from the following list:\""
     echo;
     echo "Examples:"
-    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"other\")     # Define options"
+    echo "  # Define options"
+    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"other\")"
     echo;
-    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 0 -m \$((\${#foodOptions[@]}-1))     # Get input from user"
-    echo "  echo \" Your choice is '\${selectedChoice}'\"     # Display choice selected by user"
+    echo "  # Get input from user"
+    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 0 -m \$((\${#foodOptions[@]}-1))"
+    echo;
+    echo "  # Display choice made by user"
+    echo "  echo \" Your choice is '\${selectedChoice}'\""
     echo;
     echo "---------------------------------------------------------------------------------"
     echo;
-    echo " emotionOptions=(\"Happy\" \"Sad\" \"Confused\" \"Neutral\" \"Stressed\" \"Angry\")     # Define options"
+    echo "  # Define options"
+    echo "  emotionOptions=(\"Happy\" \"Sad\" \"Confused\" \"Neutral\" \"Stressed\" \"Angry\")"
     echo;
-    echo " getChoice -q \"How are you feeling today?\" -o emotionOptions -i 0 -m \$((\${#emotionOptions[@]}-1)) -O emotion     # Get input from user and store choice in \$emotion"
-    echo " echo \"Why are you feeling ${emotion}?\"     # Ask why the user is feeling the emotion they chose"
+    echo "  # Get input from user and store choice in \$emotion"
+    echo "  getChoice -q \"How are you feeling today?\" -o emotionOptions -i 0 -m \$((\${#emotionOptions[@]}-1)) -O emotion"
+    echo;
+    echo "  # Ask why the user is feeling the emotion they chose"
+    echo "  echo \"Why are you feeling \${emotion}?\""
     echo;
     return 0
   fi
