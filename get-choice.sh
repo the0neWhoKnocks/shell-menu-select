@@ -92,7 +92,6 @@ function getChoice(){
   # If there is only the getChoice command, show error and help.
   if [[ $# -lt 1 ]]; then
     echo "[ERROR] No arguments specified."
-    echo;
     displayHelp=true
   fi
   
