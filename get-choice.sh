@@ -77,29 +77,6 @@ function renderMenu(){
   printf "${menuStr}"
 }
 
-function showHelp() {
-  echo;
-  echo "Usage: getChoice [OPTION]..."
-  echo "Renders a keyboard navigable menu with a visual indicator of what's selected."
-  echo;
-  echo "  -h, --help     Displays this message"
-  echo "  -i, --index    The initially selected index for the options"
-  echo "  -m, --max      Limit how many options are displayed"
-  echo "  -o, --options  An Array of options for a user to choose from"
-  echo "  -q, --query    Question or statement presented to the user"
-  echo;
-  echo "Example:"
-  echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
-  echo;
-  echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i \$((\${#foodOptions[@]}-1)) -m 4"
-  echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
-  echo;
-  echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
-  echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
-  echo;
-  return 0
-}
-
 function getChoice(){
   local KEY__ARROW_UP=$(echo -e "\033[A")
   local KEY__ARROW_DOWN=$(echo -e "\033[B")
@@ -115,7 +92,7 @@ function getChoice(){
   # If there is only the getChoice command, show error and help.
   if [[ $# -lt 1 ]]; then
     echo "[ERROR] No arguments specified."
-    showHelp
+    displayHelp=true
   fi
   
   while [[ $# -gt 0 ]]; do
@@ -152,7 +129,27 @@ function getChoice(){
 
   # just display help
   if $displayHelp; then
-    showHelp
+    echo;
+    echo "Usage: getChoice [OPTION]..."
+    echo "Renders a keyboard navigable menu with a visual indicator of what's selected."
+    echo;
+    echo "  -h, --help     Displays this message"
+    echo "  -i, --index    The initially selected index for the options"
+    echo "  -m, --max      Limit how many options are displayed"
+    echo "  -o, --options  An Array of options for a user to choose from"
+    echo "  -q, --query    Question or statement presented to the user"
+    echo;
+    echo "Example:"
+    echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
+    echo;
+    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i \$((\${#foodOptions[@]}-1)) -m 4"
+    echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
+    echo;
+    echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
+    echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
+    echo;
+
+    return 0
   fi
 
   set -- "${remainingArgs[@]}"
