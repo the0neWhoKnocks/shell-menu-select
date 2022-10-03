@@ -3,16 +3,18 @@
 CHAR__GREEN='\033[0;32m'
 CHAR__RESET='\033[0m'
 menuStr=""
+returnOrExit=""
 
 function hideCursor {
   printf "\033[?25l"
-
+  
   # capture CTRL+C so cursor can be reset
-  trap "showCursor && exit 0" 2
+  trap "showCursor && echo '' && ${returnOrExit} 0" SIGINT
 }
 
 function showCursor {
   printf "\033[?25h"
+  trap - SIGINT
 }
 
 function clearLastMenu {
@@ -86,7 +88,15 @@ function getChoice {
   local maxViewable=0
   local instruction="Select an item from the list:"
   local selectedIndex=0
-
+  
+  if [[ "${PS1}" == "" ]]; then
+    # running via script
+    returnOrExit="exit"
+  else
+    # running via CLI
+    returnOrExit="return"
+  fi
+  
   local remainingArgs=()
   while [[ $# -gt 0 ]]; do
     local key="$1"
@@ -142,16 +152,16 @@ function getChoice {
     echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
     echo;
 
-    return 0
+    $returnOrExit 0
   fi
 
   set -- "${remainingArgs[@]}"
   local itemsLength=${#menuItems[@]}
-
+  
   # no menu items, at least 1 required
   if [[ $itemsLength -lt 1 ]]; then
     printf "\n [ERROR] No menu items provided\n"
-    exit 1
+    $returnOrExit 1
   fi
 
   renderMenu "$instruction" $selectedIndex $maxViewable
