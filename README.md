@@ -19,7 +19,7 @@ source <(curl -s https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-se
 -h, --help     Displays help message
 
 -i, --index    The initially selected index for the options   [Default: 0]
--m, --max      Limit how many options are displayed           [Default: Length of options array value]
+-m, --max      Limit how many options are displayed           [Default: Length of options array]
 -o, --options  An Array of options for a user to choose from
 -O, --output   Name of variable to store choice               [Default: $selectedChoice]
 -q, --query    Question or statement presented to the user    [Default: "Select an item from the following list:"]
