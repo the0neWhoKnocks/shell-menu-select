@@ -7,7 +7,7 @@ menuStr=""
 function hideCursor(){
   printf "\033[?25l"
   
-  trap "showCursor && return 0" 2 # capture CTRL+C so cursor can be reset
+  trap "showCursor && return 0" 2                     # capture CTRL+C so cursor can be reset
 }
 
 function showCursor(){
