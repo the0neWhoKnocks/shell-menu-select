@@ -136,7 +136,7 @@ function getChoice(){
     echo "  -m, --max      Limit how many options are displayed"
     echo "  -o, --options  An Array of options for a user to choose from"
     echo "  -O, --output   Name of variable to store choice               [Default: \$selectedChoice]"
-    echo "  -q, --query    Question or statement presented to the user    [Default: \"Select an item from the following list:\""
+    echo "  -q, --query    Question or statement presented to the user    [Default: \"Select an item from the following list:\"]"
     echo;
     echo "Examples:"
     echo "  # Define options"
