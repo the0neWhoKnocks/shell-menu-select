@@ -60,7 +60,7 @@ function renderMenu {
     currItemLength=${#currItem}
 
     if [[ $i = $selectedIndex ]]; then
-      selectedChoice="${currItem}"
+      currentSelection="${currItem}"
       selector="${CHAR__GREEN}ᐅ${CHAR__RESET}"
       currItem="${CHAR__GREEN}${currItem}${CHAR__RESET}"
     else
@@ -90,12 +90,13 @@ function renderHelp {
   echo "  -m, --max                Limit how many options are displayed"
   echo "  -o, --options            An Array of options for a user to choose from"
   echo "  -q, --query              Question or statement presented to the user"
+  echo "  -v, --selectionVariable  Variable the selected choice will be saved to. Defaults to the 'selectedChoice' variable."
   echo;
   echo "Example:"
   echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"shit\")"
   echo;
-  echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 6 -m 4"
-  echo "  printf \"\\n First choice is '\${selectedChoice}'\\n\""
+  echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 6 -m 4 -v \"firstChoice\""
+  echo "  printf \"\\n First choice is '\${firstChoice}'\\n\""
   echo;
   echo "  getChoice -q \"Select another option in case the first isn't available\" -o foodOptions"
   echo "  printf \"\\n Second choice is '\${selectedChoice}'\\n\""
@@ -111,6 +112,9 @@ function getChoice {
   local maxViewable=0
   local instruction="Select an item from the list:"
   local selectedIndex=0
+  
+  unset selectedChoice
+  unset selectionVariable
   
   if [[ "${PS1}" == "" ]]; then
     # running via script
@@ -153,6 +157,10 @@ function getChoice {
         ;;
       -q|--query)
         instruction="$2"
+        shift 2
+        ;;
+      -v|--selectionVariable)
+        selectionVariable="$2"
         shift 2
         ;;
       *)
@@ -203,6 +211,12 @@ function getChoice {
         clearLastMenu true
         showCursor
         captureInput=false
+        
+        if [[ "${selectionVariable}" != "" ]]; then
+          printf -v "${selectionVariable}" "${currentSelection}"
+        else
+          selectedChoice="${currentSelection}"
+        fi
         ;;
     esac
   done
