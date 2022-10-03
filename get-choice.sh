@@ -8,7 +8,7 @@ function hideCursor(){
   printf "\033[?25l"
 
   # capture CTRL+C so cursor can be reset
-  trap "showCursor && exit 0" 2
+  trap "showCursor && return 0" 2
 }
 
 function showCursor(){
@@ -151,7 +151,7 @@ function getChoice(){
   # no menu items, at least 1 required
   if [[ $itemsLength -lt 1 ]]; then
     printf "\n [ERROR] No menu items provided\n"
-    exit 1
+    return 1
   fi
 
   renderMenu "$instruction" $selectedIndex $maxViewable
