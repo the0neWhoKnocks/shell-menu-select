@@ -133,7 +133,7 @@ function getChoice(){
     echo "  -h, --help     Displays this message"
     echo;
     echo "  -i, --index    The initially selected index for the options   [Default: 0]"
-    echo "  -m, --max      Limit how many options are displayed"
+    echo "  -m, --max      Limit how many options are displayed           [Default: Length of options array]"
     echo "  -o, --options  An Array of options for a user to choose from"
     echo "  -O, --output   Name of variable to store choice               [Default: \$selectedChoice]"
     echo "  -q, --query    Question or statement presented to the user    [Default: \"Select an item from the following list:\"]"
@@ -142,8 +142,11 @@ function getChoice(){
     echo "  # Define options"
     echo "  foodOptions=(\"pizza\" \"burgers\" \"chinese\" \"sushi\" \"thai\" \"italian\" \"other\")"
     echo;
+    echo "  # Get length of foodOptions"
+    echo "  foodOptLength=\$((\${#foodOptions[@]}-1))"
+    echo;
     echo "  # Get input from user"
-    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 0 -m \$((\${#foodOptions[@]}-1))"
+    echo "  getChoice -q \"What do you feel like eating?\" -o foodOptions -i 0 -m foodOptLength"
     echo;
     echo "  # Display choice made by user"
     echo "  echo \" Your choice is '\${selectedChoice}'\""
@@ -154,12 +157,16 @@ function getChoice(){
     echo "  emotionOptions=(\"Happy\" \"Sad\" \"Confused\" \"Neutral\" \"Stressed\" \"Angry\")"
     echo;
     echo "  # Get input from user and store choice in \$emotion"
-    echo "  getChoice -q \"How are you feeling today?\" -o emotionOptions -i 0 -m \$((\${#emotionOptions[@]}-1)) -O emotion"
+    echo "  getChoice -q \"How are you feeling today?\" -o emotionOptions -O emotion"
     echo;
     echo "  # Ask why the user is feeling the emotion they chose"
     echo "  echo \"Why are you feeling \${emotion}?\""
     echo;
     return 0
+  fi
+  
+  if [$maxViewable -eq 0]; then
+    maxViewable=$((${#menuItems[@]}-1))
   fi
 
   set -- "${remainingArgs[@]}"
