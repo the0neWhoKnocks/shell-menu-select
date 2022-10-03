@@ -165,7 +165,7 @@ function getChoice(){
     return 0
   fi
   
-  if [$maxViewable -eq 0]; then
+  if [ $maxViewable -eq 0 ]; then
     maxViewable=$((${#menuItems[@]}-1))
   fi
 
