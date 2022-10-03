@@ -4,24 +4,19 @@ A script that allows a user to use arrow keys to select an item from a list. Som
 
 ---
 
-## How to load
+## Usage
 
-Typical (you have the script locally)
 ```sh
-source ./get-choice.sh
-```
-
-Remote (you want the functionality, but don't want to clone or copy anything)
-```sh
-source <(wget -qO- https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-select/master/get-choice.sh)
+source ./get-choice.sh                                                                                       # Loading from local disk
+source <(wget -qO- https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-select/master/get-choice.sh) # Loading from GitHub at runtime (Good for single script applications)
+source <(curl -s https://raw.githubusercontent.com/the0neWhoKnocks/shell-menu-select/master/get-choice.sh)   # Same as above, but with curl instead.
 ```
 
 ---
 
-## How to use
-
 All flags and an example are demonstrated via the `--help` command.
 
+### Example
 ```sh
 source ./get-choice.sh
 getChoice -h
